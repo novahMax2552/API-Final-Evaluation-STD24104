@@ -7,8 +7,8 @@ app = FastAPI()
 cars_db = []
 
 class Characteristic(BaseModel):
-    max_speed: float = Field(..., gt=0, description="Vitesse maximale en km/h")
-    max_fuel_capacity: float = Field(..., gt=0, description="Capacité maximale du réservoir en litres")
+    max_speed: float = Field(..., gt=0, description="Maximal Speed")
+    max_fuel_capacity: float = Field(..., gt=0, description="Maximal Capacity")
 
 class Car(BaseModel):
     identifier: str
@@ -20,6 +20,12 @@ class Car(BaseModel):
 def ping():
     return {"message": "pong"}
 
+@app.post("/cars", response_model=List[Car])
+def create_cars(cars: List[Car]):
+    if not cars:
+        raise HTTPException(status_code=400, detail="Error: Car's list cannot be empty")
+    cars_db.extend(cars)
+    return cars_db
 
 
 
