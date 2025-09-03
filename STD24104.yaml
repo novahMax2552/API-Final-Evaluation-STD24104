@@ -3,7 +3,9 @@ info:
   title: STD24104
   version: 1.0.0
   description: This is a specification of STD24104
-
+servers:
+  - url: http://127.0.0.1:8000
+    description: Serveur local de développement
 paths:
   /ping:
     get:
