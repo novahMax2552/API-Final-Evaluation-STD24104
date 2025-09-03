@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi import Path
 from pydantic import BaseModel, Field
 from typing import List
 
@@ -30,6 +31,16 @@ def create_cars(cars: List[Car]):
 @app.get("/cars", response_model=List[Car])
 def get_cars():
     return cars_db
+
+@app.get("/cars/{id}", response_model=Car)
+def get_car_by_id(id: str = Path(..., description="Unique car identifer")):
+    for car in cars_db:
+        if car._identifier == id:
+            return car
+    raise HTTPException(
+        status_code=404,
+        detail=f"Car with identifier'{id}' doesn't exist or not found"
+    )
 
 
 
