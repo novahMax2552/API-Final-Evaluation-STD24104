@@ -27,6 +27,10 @@ def create_cars(cars: List[Car]):
     cars_db.extend(cars)
     return cars_db
 
+@app.get("/cars", response_model=List[Car])
+def get_cars():
+    return cars_db
+
 
 
 
