@@ -1,0 +1,111 @@
+openapi: 3.0.3
+info:
+  title: STD24104
+  version: 1.0.0
+  description: This is a specification of STD24104
+
+paths:
+  /ping:
+    get:
+      summary: ping-pong
+      responses:
+        '200':
+          description: pong
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: pong
+
+  /cars:
+    post:
+      summary: Crée une liste de voitures
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Car'
+      responses:
+        '200':
+          description: Liste des voitures enregistrées
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Car'
+        '400':
+          description: Requête invalide (liste vide)
+
+    get:
+      summary: Récupère toutes les voitures enregistrées
+      responses:
+        '200':
+          description: Liste complète des voitures
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Car'
+
+  /cars/{id}:
+    get:
+      summary: Récupère une voiture par son identifiant
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Identifiant unique de la voiture
+      responses:
+        '200':
+          description: Voiture trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+        '404':
+          description: Voiture non trouvée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: La voiture avec l'identifiant 'car001' n'existe pas ou n'a pas été trouvée.
+
+components:
+  schemas:
+    Characteristic:
+      type: object
+      properties:
+        max_speed:
+          type: number
+          example: 180
+        max_fuel_capacity:
+          type: number
+          example: 50
+
+    Car:
+      type: object
+      properties:
+        _identifier:
+          type: string
+          example: car001
+        _brand:
+          type: string
+          example: Toyota
+        _model:
+          type: string
+          example: Corolla
+        _characteristics:
+          $ref: '#/components/schemas/Characteristic'
